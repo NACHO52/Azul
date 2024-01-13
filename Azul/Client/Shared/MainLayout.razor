@@ -1,0 +1,32 @@
+﻿@inherits LayoutComponentBase
+@using Microsoft.AspNetCore.Components.Authorization
+@inject AuthenticationStateProvider autenticationProvider
+@inject NavigationManager navManager
+<MudThemeProvider />
+<MudDialogProvider />
+<MudSnackbarProvider />
+<div class="page">
+    <div class="sidebar">
+        <NavMenu />
+    </div>
+
+    <main>
+        <div class="top-row px-4">
+            <a href="https://docs.microsoft.com/aspnet/" target="_blank">About</a>
+            <a @onclick="CloseSession" href="javascript:void(0)">Logout</a>
+        </div>
+
+        <article class="content px-4">
+            @Body
+        </article>
+    </main>
+</div>
+
+@code {
+    private async Task CloseSession()
+    {
+        var autenticacionExt = (AuthenticationService)autenticationProvider;
+        await autenticacionExt.ActualizarEstadoAutenticacion(null);
+        navManager.NavigateTo("/", true);
+    }
+}

@@ -1,0 +1,74 @@
+﻿@page "/"
+@layout LoginLayout
+
+@using Microsoft.AspNetCore.Components.Authorization
+@inject AuthenticationStateProvider autenticacionProvider
+@inject NavigationManager navManager
+@inject ISystemUserService SystemUserService
+@inject IDialogService DialogService
+
+<div class="login_container">
+    @* <MudGrid Justify="Justify.Center" Class="login_grid">
+        <MudItem xs="12" sm="7">
+            <MudPaper Class="pa-16 ma-2" Elevation="3">
+                <MudForm @ref="form" @bind-Errors="@errors" @bind-IsValid="@success">
+                    <MudTextField T="string" @bind-Value="login.Username" Label="Username" Required="true" RequiredError="User name is required!" />
+                    <MudTextField T="string" @bind-Value="login.Password" Label="Password" @ref="pwField1" InputType="InputType.Password" Required="true" RequiredError="Password is required!" />
+                
+                    <div class="d-flex align-center justify-space-between">
+                        <MudButton Variant="Variant.Filled" Color="Color.Primary" @onclick="InitializeSession" Class="ml-auto">Login</MudButton>
+                    </div>
+                </MudForm>
+            </MudPaper>
+        </MudItem>
+    </MudGrid> *@
+
+    <EditForm Model="@login" OnValidSubmit="OnValidSubmit" Class="login_form">
+        <DataAnnotationsValidator />
+                <MudCard>
+                    <MudCardContent>
+                        <MudTextField Label="First name" @bind-Value="login.Username" For="@(() => login.Username)" />
+                        
+                        <MudTextField Label="Password" Class="mt-3" @bind-Value="login.Password" For="@(() => login.Password)" InputType="InputType.Password" />
+                        
+                    </MudCardContent>
+                    <MudCardActions>
+                        <MudButton ButtonType="ButtonType.Submit" Variant="Variant.Filled" Color="Color.Primary" Class="ml-auto">Login</MudButton>
+                    </MudCardActions>
+                </MudCard>
+    </EditForm>
+</div>
+@code {
+    bool success;
+    // string[] errors = { };
+    // MudForm form;
+    // MudTextField<string> pwField1;
+    private LoginDTO login = new LoginDTO();
+
+    private async void OnValidSubmit(EditContext context)
+    {
+        success = true;
+        await InitializeSession((LoginDTO)context.Model);
+    }
+
+    private async Task InitializeSession(LoginDTO obj)
+    {
+        var loginResponse = await SystemUserService.Login(obj);
+        if (loginResponse.IsSuccessStatusCode)
+        {
+            var sesionUsuario = await loginResponse.Content.ReadFromJsonAsync<SystemUser>();
+            var autenticacionExt = (AuthenticationService)autenticacionProvider;
+            await autenticacionExt.ActualizarEstadoAutenticacion(sesionUsuario);
+
+            navManager.NavigateTo("/index");
+        }
+        else
+        {
+            success = false;
+            var parameter = new DialogParameters<NotifyDialog> { { x => x.Message, "Invalid username or password." } };
+            DialogService.Show<NotifyDialog>("Error!", parameter);
+        }
+
+    }
+
+}

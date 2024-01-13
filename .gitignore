@@ -1,0 +1,13 @@
+/Azul.Repository/bin/Debug/net7.0/*.dll
+*.dll
+/Azul/Client/obj
+/Azul/Client/bin
+/Azul/Server/bin
+/Azul/Server/obj
+/Azul/Shared/bin
+/Azul/Shared/obj
+/Azul.Repository/bin
+/Azul.Repository/obj
+/.vs/ProjectEvaluation
+/.vs/sd
+/.vs/Azul/FileContentIndex

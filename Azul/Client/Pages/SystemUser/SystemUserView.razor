@@ -1,0 +1,23 @@
+﻿@page "/SystemUser"
+@inject ISystemUserService SystemUserService
+
+<h3>SystemUserView</h3>
+
+
+
+@code {
+    public IList<SystemUser> SystemUsers;
+    public string Message { get; set; }
+
+    protected override async Task OnInitializedAsync()
+    {
+        try
+        {
+            SystemUsers = await SystemUserService.GetAll();
+        }
+        catch (Exception e)
+        {
+            Message = "Error:" + e.Message;
+        }
+    }
+}
