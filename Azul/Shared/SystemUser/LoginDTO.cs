@@ -1,13 +1,14 @@
+using Azul.Shared.Resources;
 using System.ComponentModel.DataAnnotations;
 
 namespace Azul.Shared
 {
     public class LoginDTO
     {
-        [Required]
+        [Required(ErrorMessageResourceName = "RequiredError", ErrorMessageResourceType = typeof(Text))]
         public string Username { get; set; }
 
-        [Required]
+        [Required(ErrorMessageResourceName = "RequiredError", ErrorMessageResourceType = typeof(Text))]
         public string Password { get; set; }
     }
 }

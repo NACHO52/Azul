@@ -19,4 +19,6 @@ builder.Services.AddBlazoredSessionStorage();
 builder.Services.AddScoped<AuthenticationStateProvider, AuthenticationService>();
 builder.Services.AddAuthorizationCore();
 
+builder.Services.AddLocalization();
+
 await builder.Build().RunAsync();

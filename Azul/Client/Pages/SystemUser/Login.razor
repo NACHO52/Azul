@@ -6,6 +6,7 @@
 @inject NavigationManager navManager
 @inject ISystemUserService SystemUserService
 @inject IDialogService DialogService
+@inject IStringLocalizer<Azul.Shared.Resources.Text> _localizer
 
 <div class="login_container">
     @* <MudGrid Justify="Justify.Center" Class="login_grid">
@@ -27,13 +28,13 @@
         <DataAnnotationsValidator />
                 <MudCard>
                     <MudCardContent>
-                        <MudTextField Label="First name" @bind-Value="login.Username" For="@(() => login.Username)" />
+                        <MudTextField Label="@_localizer["Username"]" @bind-Value="login.Username" For="@(() => login.Username)" />
                         
-                        <MudTextField Label="Password" Class="mt-3" @bind-Value="login.Password" For="@(() => login.Password)" InputType="InputType.Password" />
+                        <MudTextField Label="@_localizer["Password"]" Class="mt-3" @bind-Value="login.Password" For="@(() => login.Password)" InputType="InputType.Password" />
                         
                     </MudCardContent>
                     <MudCardActions>
-                        <MudButton ButtonType="ButtonType.Submit" Variant="Variant.Filled" Color="Color.Primary" Class="ml-auto">Login</MudButton>
+                        <MudButton ButtonType="ButtonType.Submit" Variant="Variant.Filled" Color="Color.Primary" Class="ml-auto">@_localizer["Login"]</MudButton>
                     </MudCardActions>
                 </MudCard>
     </EditForm>
@@ -65,8 +66,8 @@
         else
         {
             success = false;
-            var parameter = new DialogParameters<NotifyDialog> { { x => x.Message, "Invalid username or password." } };
-            DialogService.Show<NotifyDialog>("Error!", parameter);
+            var parameter = new DialogParameters<NotifyDialog> { { x => x.Message, _localizer["InvalidLogin"] } };
+            DialogService.Show<NotifyDialog>(_localizer["Error"], parameter);
         }
 
     }
